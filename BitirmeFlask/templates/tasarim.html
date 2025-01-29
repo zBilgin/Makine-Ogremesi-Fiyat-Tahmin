@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Araba Bilgileri Girişi</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Zekeriya Bilgin</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" href="#">222503207</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header text-center">
+        <h3>Araba Bilgilerini Girin</h3>
+      </div>
+      <div class="card-body">
+        <form id="carForm" action="http://127.0.0.1:5000/process_form" method="POST">
+          <div class="form-group">
+            <label for="mark">MARKA-BRAND:</label>
+            <input type="text" id="mark" name="marka" class="form-control" placeholder="Toyota" required>
+          </div>
+          <div class="form-group">
+            <label for="model">MODEL:</label>
+            <input type="text" id="model" name="model" class="form-control" placeholder="Corolla" required>
+          </div>
+          <div class="form-group">
+            <label for="year">YIL-YEAR:</label>
+            <input type="number" id="year" name="year" class="form-control" placeholder="2000-2024" required min="2000" max="2024">
+          </div>
+          <div class="form-group">
+            <label for="km">KILOMETER (km):</label>
+            <input type="number" id="km" name="km" step="1000" class="form-control" placeholder="100000" required>
+          </div>
+          <div class="form-group">
+            <label for="vites">VITES-TRANSMISSION:</label>
+            <select id="vites" name="vites_turu" class="form-control" required>
+              <option value="1">Manual</option>
+              <option value="2">Automatic</option>
+              <option value="3">Semi-Automatic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fuel">YAKIT TUR-FUEL TYPE:</label>
+            <select id="fuel" name="fuel" class="form-control" required>
+              <option value="1">Benzin-Gasoline</option>
+              <option value="2">Dizel-Diesel</option>
+              <option value="3">LPG&Benzin-LPG&Gasoline</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="renk">RENK-COLOR:</label>
+            <select id="renk" name="renk" class="form-control" required>
+                <option value="Siyah">Siyah-Black</option>
+                <option value="Beyaz">Beyaz-White</option>
+                <option value="Gri">Gri-Gray</option>
+                <option value="Mavi">Mavi-Blue</option>
+            </select><br>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Tahmin Et</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+      <div id="result" class="mt-4 card d-flex justify-content-center" style="display: none;">
+            <div class="card-header text-center">
+                <h3>Tahmin Sonuçları</h3>
+            </div>
+            <div class="card-body text-center">
+                <h4>Fiyat Tahmini: <span id="price"></span> TL</h4>
+                <h5>Model Performansı:</h5>
+                <p id="r2"></p>
+            </div>
+      </div>
+
+  <footer class="container mt-5">
+    <div class="py-3 text-center">
+      <p class="text-muted">© 2024-2025 İskenderun Teknik Üniversitesi - Proje Tasarımı 1</p>
+    </div>
+  </footer>
+
+<script>
+    document.getElementById('carForm').onsubmit = async function(e) {
+        e.preventDefault();
+
+        let form = new FormData(this);
+        let response = await fetch('/process_form', {
+            method: 'POST',
+            body: form
+        });
+
+        let data = await response.json();
+
+        document.getElementById('price').innerText = data.tahmin.toLocaleString('tr-TR') ;
+        document.getElementById('r2').innerText = 'R2: '+ data.r2;
+        document.getElementById('result').style.display = 'block';  // Sonuçları göster
+    };
+</script>
+
+</body>
+</html>
